@@ -51,19 +51,16 @@ extension CommandGroup {
     }
 
     private func outputGroupHelp(using context: inout CommandContext) {
-        context.console.output("\("Usage:", style: .info) \(context.input.executable) ", newLine: false)
-        context.console.output("\("<command>", style: .warning)", newLine: false)
-        context.console.print()
-
-        if !self.help.isEmpty {
-            context.console.print()
-            context.console.print(self.help)
-        }
-
+        outputHelpHeader(using: &context)
+        outputUsage(using: &context)
+        outputCommands(using: &context)
+    }
+    
+    private func outputCommands(using context: inout CommandContext) {
         let padding = self.commands.map { $0.key }.longestCount + 2
         if self.commands.count > 0 {
             context.console.print()
-            context.console.output("Commands:".consoleText(.success))
+            context.console.output("Commands:".consoleText(.info))
             for (key, command) in self.commands.sorted(by: { $0.key < $1.key }) {
                 context.console.outputHelpListItem(
                     name: key,
@@ -73,11 +70,16 @@ extension CommandGroup {
                 )
             }
         }
-
         context.console.print()
-        context.console.print("Use `\(context.input.executable) ", newLine: false)
-        context.console.output("<command>".consoleText(.warning), newLine: false)
-        context.console.output(" [--help,-h]".consoleText(.success) + "` for more information on a command.")
+    }
+    
+    private func outputUsage(using context: inout CommandContext) {
+        context.console.output(
+            "Usage: ".consoleText(.info) +
+            context.usageDescriptor.consoleText() +
+            " <command>".consoleText(.warning) +
+            " [--help,-h]".consoleText(.success)
+        )
     }
 
     private func commmand(using context: inout CommandContext) throws -> AnyCommand? {

@@ -101,81 +101,8 @@ extension Command {
     }
 
     public func outputHelp(using context: inout CommandContext) {
-        context.console.output("Usage: ".consoleText(.info) + context.input.executable.consoleText() + " ", newLine: false)
-        Signature.reference.outputHelp(help: self.help, using: &context)
-    }
-}
-
-extension CommandSignature {
-    public func outputHelp(help: String, using context: inout CommandContext) {
-        for argument in self.arguments {
-            context.console.output(("<" + argument.name + "> ").consoleText(.warning), newLine: false)
-        }
-
-        for option in self.options {
-            if let short = option.short {
-                context.console.output("[--\(option.name),-\(short)] ".consoleText(.success), newLine: false)
-            } else {
-                context.console.output("[--\(option.name)] ".consoleText(.success), newLine: false)
-            }
-        }
-
-        for flag in self.flags {
-            if let short = flag.short {
-                context.console.output("[--\(flag.name),-\(short)] ".consoleText(.info), newLine: false)
-            } else {
-                context.console.output("[--\(flag.name)] ".consoleText(.info), newLine: false)
-            }
-        }
-        context.console.print()
-
-        if !help.isEmpty {
-            context.console.print()
-            context.console.print(help)
-        }
-
-        let names = self.options.map { $0.name }
-            + self.arguments.map { $0.name }
-            + self.flags.map { $0.name }
-
-        let padding = names.longestCount + 2
-        if self.arguments.count > 0 {
-            context.console.print()
-            context.console.output("Arguments:".consoleText(.info))
-            for argument in self.arguments {
-                context.console.outputHelpListItem(
-                    name: argument.name,
-                    help: argument.help,
-                    style: .info,
-                    padding: padding
-                )
-            }
-        }
-
-        if self.options.count > 0 {
-            context.console.print()
-            context.console.output("Options:".consoleText(.info))
-            for option in self.options {
-                context.console.outputHelpListItem(
-                    name: option.name,
-                    help: option.help,
-                    style: .success,
-                    padding: padding
-                )
-            }
-        }
-
-        if self.flags.count > 0 {
-            context.console.print()
-            context.console.output("Flags:".consoleText(.info))
-            for option in self.flags {
-                context.console.outputHelpListItem(
-                    name: option.name,
-                    help: option.help,
-                    style: .success,
-                    padding: padding
-                )
-            }
-        }
+        outputHelpHeader(using: &context)
+        Signature.reference.outputUsage(using: &context)
+        Signature.reference.outputSignatureHelp(using: &context)
     }
 }
