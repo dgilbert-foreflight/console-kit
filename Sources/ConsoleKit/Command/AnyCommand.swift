@@ -13,6 +13,15 @@ public protocol AnyCommand {
 }
 
 extension AnyCommand {
+    
+    /// How the command should be identified via the console.
+    public static var identifier: String {
+        return String(describing: Self.self)
+            .convertedToSnakeCase()
+    }
+}
+
+extension AnyCommand {
     public func outputAutoComplete(using context: inout CommandContext) {
         // do nothing
     }
