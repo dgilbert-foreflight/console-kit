@@ -50,7 +50,7 @@ public struct ConsoleLogger: LogHandler {
             text += "[ \(self.label) ] ".consoleText()
         }
             
-        text += "[ \(level.name) ]".consoleText(level.style)
+        text += " \(level.icon) ".consoleText(level.style)
             + " "
             + message.description.consoleText()
 
@@ -133,6 +133,25 @@ extension Logger.Level {
         case .warning: return "WARNING"
         case .error: return "ERROR"
         case .critical: return "CRITICAL"
+        }
+    }
+    
+    public var icon: Character {
+        switch self {
+        case .trace:
+            return "◼️"
+        case .debug:
+            return "◽️"
+        case .info:
+            return "🔷"
+        case .notice:
+            return "💠"
+        case .warning:
+            return "🔶"
+        case .error:
+            return "❌"
+        case .critical:
+            return "❗️"
         }
     }
 }
