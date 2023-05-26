@@ -105,7 +105,7 @@ extension AsyncCommand {
 
     public func outputHelp(using context: inout CommandContext) {
         context.console.output("Usage: ".consoleText(.info) + context.input.executable.consoleText() + " ", newLine: false)
-        Signature.reference.outputHelp(help: self.help, using: &context)
+        Signature.reference.outputSignatureHelp(using: &context)
     }
 }
 #endif
